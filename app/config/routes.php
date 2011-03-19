@@ -19,6 +19,9 @@
 use lithium\net\http\Router;
 use lithium\core\Environment;
 
+use lithium\action\Response;
+use app\models\Url;
+
 /**
  * Here, we are connecting `'/'` (the base path) to controller called `'Pages'`,
  * its action called `view()`, and we pass a param to select the view file
@@ -28,7 +31,17 @@ use lithium\core\Environment;
  * @see app\controllers\PagesController
  */
 Router::connect('/', 'Url::create');
-
+Router::connect('/{:slug}', array('slug' => null), function($request) {
+    $match = Url::first(array(
+        'fields' => array('url'),
+        'conditions' => array(
+            'slug' => $request->slug
+        )
+    ));
+    if($match) {
+        return new Response(array('location' => $match->url));
+    }
+});
 /**
  * Connect the rest of `PagesController`'s URLs. This will route URLs like `/pages/about` to
  * `PagesController`, rendering `/views/pages/about.html.php` as a static page.
