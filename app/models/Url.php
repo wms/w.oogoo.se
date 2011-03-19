@@ -19,6 +19,10 @@ class Url extends \lithium\data\Model {
     ));
 
     public function save($entity, $data = null, array $options = array()) {
+        // Url needs a protocol - if we haven't included one, prepend http://
+        if(!preg_match('/^http(?:s)?\:\/\//', $data['url'])) {
+            $data['url'] = 'http://' . $data['url'];
+        }
         $data['slug'] = base_convert(static::count(), 10, 36);
         return parent::save($entity, $data, $options); 
     }
