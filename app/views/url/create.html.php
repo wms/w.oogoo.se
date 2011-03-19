@@ -8,4 +8,5 @@
 <?= $this->form->field('url', array('label' => 'URL to shorten')) ?>
 <?= $this->form->submit('goosify') ?>
 <?= $this->form->end() ?>
+<p><?= $this->html->link('See some stats.', array('controller' => 'stats'))?></p>
 <?php endif ?>
