@@ -33,12 +33,17 @@ use app\models\Url;
 Router::connect('/', 'Url::create');
 Router::connect('/{:slug}', array('slug' => null), function($request) {
     $match = Url::first(array(
-        'fields' => array('url'),
         'conditions' => array(
             'slug' => $request->slug
         )
     ));
     if($match) {
+        Url::update(array(
+                '$inc' => array('hits' => 1)
+            ),
+            array(
+            '_id' => $match->_id,
+        ));
         return new Response(array('location' => $match->url));
     }
 });
